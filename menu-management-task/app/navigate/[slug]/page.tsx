@@ -11,7 +11,7 @@ export default function MenuItem() {
   const pages = {
     menus: {
       title: "Menus",
-      description: "Manage your menus here",
+      description: "",
       icon: <Squares2X2Icon className="h-10 w-10 text-blue-500" />,
     },
     systems: {
@@ -56,12 +56,12 @@ export default function MenuItem() {
   return (
     <div>
       <BreadCrumb title={slug}/>      
-    <div className="p-6">
+    <div className="pt-6">
       <div className="flex items-center space-x-4">
         {pageData.icon }
         <h1 className="text-3xl font-bold">{pageData.title}</h1>
       </div>
-      <p className="mt-4 text-gray-600">{pageData.description}</p>
+      <p className="mt-10 text-gray-600">{pageData.description}</p>
       {slug === "menus" && <DynamicMenu />}
     </div>
     </div>

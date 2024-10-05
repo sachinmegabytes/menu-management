@@ -29,6 +29,7 @@ export default function DynamicMenu() {
   const [menus, setMenus] = useState(menuData); // State for the menu data
   const [newMenu, setNewMenu] = useState(""); // State for new menu input
   const [expandAll, setExpandAll] = useState(false); // State to manage expand all/collapse all
+  const [selectedMenuId, setSelectedMenuId] = useState(null);
 
   const menuOptions = ["system management", "API List", "Users & Groups"];
 
@@ -55,53 +56,93 @@ export default function DynamicMenu() {
     }
   };
 
+  const selectMenu = (parentId) => {
+    setSelectedMenuId(parentId);
+  }
+
   return (
-    <div>
-      <Dropdown options={menuOptions} defaultOption="system management" />
+    <div className="flex">
+      {/* Left Side - Menu Tree and Buttons */}
+      <div className="flex-1 pr-10">
+        <Dropdown options={menuOptions} defaultOption="system management" />
 
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Menus</h1>
-
-        {/* New Menu Input */}
-        <div className="flex items-center">
-          <input
-            type="text"
-            value={newMenu}
-            onChange={(e) => setNewMenu(e.target.value)}
-            placeholder="New Menu Title"
-            className="border px-2 py-1 mr-2 text-black"
-          />
+        <div className="flex items-center mt-6">
           <button
-            className="bg-blue-500 text-white px-4 py-2 rounded"
-            onClick={handleAddMenu}
-          >
-            + Add New Item
-          </button>
-        </div>
-      </div>
-
-      <div className="mt-4 bg-gray-50 p-6 rounded shadow-lg">
-        {/* Menu Hierarchical Tree */}
-        <div>
-          {menus.map((menu) => (
-            <MenuTree key={menu.id} menu={menu} expandAll={expandAll} />
-          ))}
-        </div>
-
-        {/* Expand All / Collapse All buttons */}
-        <div className="flex items-center">
-          <button
-            className="bg-gray-700 text-white px-4 py-2 rounded mr-2"
-            onClick={handleExpandAll} // Connect handleExpandAll to button
+            className={`${
+              expandAll ? "bg-gray-700 text-white" : "text-black"
+            } px-8 py-2 rounded-3xl mr-2 border-gray-200 border-2`}
+            onClick={handleExpandAll}
           >
             Expand All
           </button>
           <button
-            className="bg-gray-700 text-white px-4 py-2 rounded mr-2"
+            className={`${
+              !expandAll ? "bg-gray-700 text-white" : "text-black"
+            } px-8 py-2 rounded-3xl border-gray-200 border-2`}
             onClick={handleCollapseAll}
           >
             Collapse All
           </button>
+        </div>
+
+        {/* Menu Hierarchical Tree */}
+        <div className="mt-6">
+          {menus.map((menu) => (
+            <MenuTree key={menu.id} menu={menu} expandAll={expandAll} selectMenu={selectMenu}/>
+          ))}
+        </div>
+      </div>
+
+      {/* Right Side - Input Fields */}
+      <div className="flex-1">
+        <div className="flex flex-col items-end">
+          <div className="w-full mb-4">
+            <label className="block text-gray-500 text-sm mb-1">Menu ID</label>
+            <input
+              type="text"
+              value={selectedMenuId}
+              disabled
+              placeholder="New Menu Title"
+              className="rounded-xl px-2 py-1 mr-2 text-black bg-gray-100 w-64 h-10"
+            />
+          </div>
+          <div className="w-full mb-4">
+            <label className="block text-gray-500 text-sm mb-1">Depth</label>
+            <input
+              type="text"
+              value={newMenu}
+              onChange={(e) => setNewMenu(e.target.value)}
+              placeholder="New Menu Title"
+              className="rounded-xl px-2 py-1 mr-2 text-black bg-gray-100 w-64 h-10"
+            />
+          </div>
+          <div className="w-full mb-4">
+            <label className="block text-gray-500 text-sm mb-1">
+              Parent Data
+            </label>
+            <input
+              type="text"
+              value={newMenu}
+              onChange={(e) => setNewMenu(e.target.value)}
+              placeholder="New Menu Title"
+              className="rounded-xl px-2 py-1 mr-2 text-black bg-gray-100 w-64 h-10"
+            />
+          </div>
+          <div className="w-full mb-4">
+            <label className="block text-gray-500 text-sm mb-1">Name</label>
+            <input
+              type="text"
+              value={newMenu}
+              onChange={(e) => setNewMenu(e.target.value)}
+              placeholder="New Menu Title"
+              className="rounded-xl px-2 py-1 mr-2 text-black bg-gray-100 w-64 h-10"
+            />
+          </div>
+          <div className="w-full mb-4">
+            <button className="bg-blue-600 w-64 text-white font-bold py-3 px-10 rounded-full text-xl relative" onClick={()=>handleAddMenu()}>
+              Save
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import {
   Bars3Icon,
   FolderIcon,
@@ -9,14 +9,15 @@ import {
   Squares2X2Icon,
   ArrowLeftIcon,
 } from "@heroicons/react/24/outline";
+import Logo from "./Logo";
 
 export default function SideNav({ children }) {
   const [isOpen, setIsOpen] = useState(true);
   const [isActiveTab, setIsActiveTab] = useState("menus");
-  const router = useRouter(); 
+  const router = useRouter();
   const handleTabChange = (tab) => {
     setIsActiveTab(tab);
-    router.push(`/navigate/${tab}`)
+    router.push(`/navigate/${tab}`);
   };
 
   return (
@@ -28,24 +29,21 @@ export default function SideNav({ children }) {
         } bg-gray-900 h-screen transition-all duration-300 rounded-3xl p-2.5`}
       >
         <div className="flex items-center justify-between p-4 text-white">
-          <span className={`${isOpen ? "text-xl font-bold" : "hidden"}`}>
-            CLOIT
-          </span>
-          <button
+          <Logo
+            className={`${isOpen ? "text-xl font-bold" : "hidden"}`}
             onClick={() => setIsOpen(!isOpen)}
-            className="focus:outline-none"
-          >
-            {isOpen ? (
-              <ArrowLeftIcon className="h-6 w-6 text-white" />
-            ) : (
-              <Bars3Icon className="h-6 w-6 text-white" />
-            )}
-          </button>
+          />
+          {!isOpen && (
+            <Bars3Icon
+              onClick={() => setIsOpen(!isOpen)}
+              className="h-6 w-6 text-white cursor-pointer"
+            />
+          )}
         </div>
 
-        <nav className="mt-10 p-2.5">
+        <nav className="mt-5">
           <ul>
-            <div className="bg-gray-800 rounded-2xl p-2.5">
+            <div className={`${isOpen ? "bg-gray-800 rounded-2xl p-2.5" : ""}`}>
               <li
                 className={`${
                   isActiveTab === "systems"

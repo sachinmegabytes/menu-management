@@ -8,9 +8,7 @@ export class MenuService {
 
   // Get all menus with their children
   async getMenus() {
-    const menus = await this.prisma.menu.findMany({
-      orderBy: { depth: 'asc' },
-    });
+    const menus = await this.prisma.menu.findMany({});
 
     // Convert flat menu array into nested structure
     return this.buildMenuTree(menus);
@@ -39,20 +37,6 @@ export class MenuService {
     });
   }
 
-  // Create a new menu item
-  // async createMenu(data: Prisma.MenuCreateInput, parentId?: string | null) {
-  //   return this.prisma.menu.create({
-  //     data: {
-  //       name: data.name,
-  //       depth: data.depth,
-  //       // Handle parent relation: if parentId is present, connect to parent; otherwise, create as a root item
-  //       ...(parentId && parentId !== ''
-  //         ? { parent: { connect: { id: parentId } } } // Connect to parent if parentId is provided
-  //         : {}), // No parentId means it's a root menu item
-  //     },
-  //   });
-  // }
-
   async createMenu(data: { name: string; depth: number; parentId?: string }) {
     const { parentId, name, depth } = data;
 
@@ -68,21 +52,19 @@ export class MenuService {
     return newMenu;
   }
 
-  // Update an existing menu item
   async updateMenu(
     id: string,
-    data: Prisma.MenuUpdateInput,
-    parentId?: string | null,
+    data: { name?: string; depth?: number }, // Make both fields optional
   ) {
+    const menu = await this.prisma.menu.findUnique({
+      where: { id },
+    });
+
     return this.prisma.menu.update({
       where: { id },
       data: {
-        name: data.name,
-        depth: data.depth,
-        // Handle parent relation: connect to parent if parentId is provided, otherwise disconnect
-        ...(parentId && parentId !== ''
-          ? { parent: { connect: { id: parentId } } } // Connect to new parent if parentId is provided
-          : { parent: { disconnect: true } }), // If no parentId, disconnect and make it a root item
+        ...(data.name && { name: data.name }), // Update `name` if provided
+        ...(data.depth && { depth: data.depth }), // Update `depth` if provided
       },
     });
   }

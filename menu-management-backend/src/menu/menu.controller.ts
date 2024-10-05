@@ -5,10 +5,11 @@ import {
   Body,
   Param,
   Delete,
-  Put,
+  Patch,
 } from '@nestjs/common';
 import { MenuService } from './menu.service';
 import { Prisma } from '@prisma/client';
+import { UpdateMenuDto } from './dto/UpdateMenu.dto';
 
 @Controller('menu')
 export class MenuController {
@@ -32,13 +33,12 @@ export class MenuController {
     return this.menuService.createMenu(data);
   }
 
-  // Update an existing menu
-  @Put(':id')
+  @Patch(':id')
   async updateMenu(
     @Param('id') id: string,
-    @Body() data: Prisma.MenuUpdateInput,
+    @Body() updateMenuDto: UpdateMenuDto, // Use DTO instead of Prisma type
   ) {
-    return this.menuService.updateMenu(id, data);
+    return this.menuService.updateMenu(id, updateMenuDto);
   }
 
   // Delete a menu item

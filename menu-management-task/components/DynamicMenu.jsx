@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import MenuTree from "./MenuTree";
 import Dropdown from "./Dropdown";
-import { API_URL } from "../api/constant";
 
 export default function DynamicMenu() {
   const [menus, setMenus] = useState(); // State for the menu data
@@ -15,6 +14,8 @@ export default function DynamicMenu() {
 
   const [loading, setLoading] = useState(true);
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  
   const fetchMenus = async () => {
     const res = await fetch(`${API_URL}/menu`);
     const data = await res.json();

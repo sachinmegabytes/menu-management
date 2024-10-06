@@ -26,7 +26,7 @@ export default function SideNav({ children }) {
       <aside
         className={`${
           isOpen ? "w-64" : "w-20"
-        } bg-gray-900 h-screen transition-all duration-300 rounded-3xl p-2.5`}
+        } bg-gray-900 h-screen transition-all duration-300 rounded-3xl p-2.5 h-auto`}
       >
         <div className="flex items-center justify-between p-4 text-white">
           <Logo
